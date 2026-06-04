@@ -1,2 +1,1 @@
-# WinCoD
-WinCoD - Cheats for CoD
+# © 2026 WinCoD
