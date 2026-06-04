@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WinCoD Server Status</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0404;
+            padding: 20px;
+            position: relative;
+        }
+        /* Animated moving lines (same as shop) */
+        .moving-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #b30000, #ff1a1a, #990000, transparent);
+            height: 2px;
+            width: 100%;
+            animation: moveLine 8s linear infinite;
+        }
+        @keyframes moveLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .line:nth-child(1) { top: 10%; animation-duration: 12s; width: 80%; left: 10%; }
+        .line:nth-child(2) { top: 25%; animation-duration: 9s; width: 85%; left: 7%; }
+        .line:nth-child(3) { top: 40%; animation-duration: 15s; width: 90%; left: 5%; }
+        .line:nth-child(4) { top: 55%; animation-duration: 7s; width: 75%; left: 12%; }
+        .line:nth-child(5) { top: 70%; animation-duration: 11s; width: 95%; left: 2%; }
+        .line:nth-child(6) { top: 85%; animation-duration: 13s; width: 85%; left: 8%; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        /* Glass header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 5, 5, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 15px 20px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 50, 50, 0.4);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        h1 {
+            color: white;
+            font-size: 24px;
+        }
+        .btn {
+            background: #667eea;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* Glass cards */
+        .card {
+            background: rgba(20, 5, 5, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 50, 50, 0.4);
+        }
+        .card h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            border-left: 3px solid #ff3333;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4ade80;  /* green for all amounts */
+        }
+        .stat-label {
+            color: #ddd;
+            margin-top: 5px;
+        }
+        /* Chart canvas styling */
+        canvas {
+            max-height: 400px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 10px;
+        }
+        /* Server info text */
+        .info-text {
+            color: #ddd;
+            line-height: 1.8;
+        }
+        .info-text strong {
+            color: #ff9999;
+        }
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: stretch; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="moving-lines">
+        <div class="line"></div><div class="line"></div><div class="line"></div>
+        <div class="line"></div><div class="line"></div><div class="line"></div>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Server Status & Transaction Growth</h1>
+            <a href="/admin/data" class="btn">← Back to Dashboard</a>
+        </div>
+
+        <div class="stats-grid" id="summaryStats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalTransactions">-</div>
+                <div class="stat-label">Total Transactions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalGross">-</div>
+                <div class="stat-label">Total Gross (USD)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalNet">-</div>
+                <div class="stat-label">Total Net (USD)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalNetSAR">-</div>
+                <div class="stat-label">Total Net (SAR)</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📈 Daily Transactions (Last 30 Days)</h2>
+            <canvas id="transactionChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h2>🖥️ Server Information</h2>
+            <div class="info-text">
+                <p><strong>Uptime:</strong> <span id="uptime">-</span></p>
+                <p><strong>Server started:</strong> <span id="startTime">-</span></p>
+                <p><strong>Current time:</strong> <span id="currentTime">-</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart;
+        async function fetchStats() {
+            try {
+                const res = await fetch('/api/transaction-stats');
+                if (!res.ok) throw new Error('Failed to fetch stats');
+                const data = await res.json();
+                const ctx = document.getElementById('transactionChart').getContext('2d');
+                if (chart) chart.destroy();
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Number of Transactions',
+                                data: data.counts,
+                                backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                                borderColor: '#667eea',
+                                borderWidth: 1,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Gross Amount (USD)',
+                                data: data.gross,
+                                type: 'line',
+                                borderColor: '#22c55e',
+                                backgroundColor: 'transparent',
+                                tension: 0.1,
+                                yAxisID: 'y1',
+                                pointBackgroundColor: '#22c55e'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: { mode: 'index', intersect: false },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Transaction Count', color: '#ddd' },
+                                grid: { color: 'rgba(255,255,255,0.1)' }
+                            },
+                            y1: {
+                                position: 'right',
+                                beginAtZero: true,
+                                title: { display: true, text: 'Amount (USD)', color: '#ddd' },
+                                grid: { drawOnChartArea: false },
+                                ticks: { callback: (value) => '$' + value }
+                            }
+                        },
+                        plugins: {
+                            tooltip: { mode: 'index', intersect: false },
+                            legend: { labels: { color: '#fff' } }
+                        }
+                    }
+                });
+
+                const totalsRes = await fetch('/api/all-time-totals');
+                if (totalsRes.ok) {
+                    const totals = await totalsRes.json();
+                    document.getElementById('totalTransactions').innerText = totals.count || 0;
+                    document.getElementById('totalGross').innerText = '$' + (totals.gross || '0.00');
+                    document.getElementById('totalNet').innerText = '$' + (totals.net || '0.00');
+                    document.getElementById('totalNetSAR').innerText = (totals.netSAR || '0.00') + ' SAR';
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('totalTransactions').innerText = 'Error';
+            }
+        }
+
+        async function fetchUptime() {
+            try {
+                const res = await fetch('/api/server-uptime');
+                const data = await res.json();
+                document.getElementById('uptime').innerText = data.uptime || '?';
+                document.getElementById('startTime').innerText = data.startTime ? new Date(data.startTime).toLocaleString() : '?';
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function updateCurrentTime() {
+            document.getElementById('currentTime').innerText = new Date().toLocaleString();
+        }
+
+        fetchStats();
+        fetchUptime();
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 1000);
+        setInterval(fetchUptime, 60000);
+        setInterval(fetchStats, 300000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>WinCoD - Contact Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* ========== BASE & MOVING LINES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0404;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+        }
+        .moving-lines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.3; pointer-events: none;
+        }
+        .line {
+            position: absolute; background: linear-gradient(90deg, transparent, #b30000, #ff1a1a, #990000, transparent);
+            height: 2px; width: 100%; animation: moveLine 8s linear infinite;
+        }
+        @keyframes moveLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .line:nth-child(1) { top: 10%; animation-duration: 12s; width: 80%; left: 10%; }
+        .line:nth-child(2) { top: 25%; animation-duration: 9s; width: 85%; left: 7%; }
+        .line:nth-child(3) { top: 40%; animation-duration: 15s; width: 90%; left: 5%; }
+        .line:nth-child(4) { top: 55%; animation-duration: 7s; width: 75%; left: 12%; }
+        .line:nth-child(5) { top: 70%; animation-duration: 11s; width: 95%; left: 2%; }
+        .line:nth-child(6) { top: 85%; animation-duration: 13s; width: 85%; left: 8%; }
+
+        .glass-card {
+            background: rgba(20, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 50, 50, 0.6);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            color: white;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: rgba(255,200,200,0.7);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .info-box {
+            background: rgba(102, 126, 234, 0.15);
+            backdrop-filter: blur(8px);
+            border-left: 4px solid #ff6666;
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #ffcccc;
+            font-size: 14px;
+        }
+        .info-box a {
+            color: #ff6666;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .info-box a:hover {
+            text-decoration: underline;
+            color: #ff9999;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            color: rgba(255,200,200,0.8);
+            margin-bottom: 8px;
+        }
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,50,50,0.4);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        .input-group select option {
+            background: #1a1a2e;
+        }
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #cc0000, #660000);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px #ff0000;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            color: #ff9999;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: white;
+        }
+        .error-message, .success-message {
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .error-message {
+            background: rgba(239,68,68,0.2);
+            border: 1px solid rgba(239,68,68,0.4);
+            color: #fca5a5;
+        }
+        .success-message {
+            background: rgba(34,197,94,0.2);
+            border: 1px solid rgba(34,197,94,0.4);
+            color: #4ade80;
+        }
+        @media (max-width: 480px) {
+            .glass-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="moving-lines">
+        <div class="line"></div><div class="line"></div><div class="line"></div>
+        <div class="line"></div><div class="line"></div><div class="line"></div>
+    </div>
+    <div class="glass-card">
+        <h1>Contact Support</h1>
+        <div class="subtitle">We're here to help</div>
+
+        <!-- Info box with Telegram link -->
+        <div class="info-box">
+            ⚡ Please Contact Us on 
+            <a href="https://t.me/OU71C" target="_blank" rel="noopener noreferrer">Telegram</a> 
+            if none of our support team responded via email within 24 hours.<br>
+            Thank you.
+
+           <p>Note: <strong>Spaming reqeusts will not help you as fast as you think,
+            your account could get permanent Deletion  and all of your Subscriptions will be canceled. 
+           </strong></p>
+           
+        </div>
+
+        <% if (error) { %><div class="error-message"><%= error %></div><% } %>
+        <% if (success) { %><div class="success-message"><%= success %></div><% } %>
+
+        <form action="/contact" method="POST">
+            <div class="input-group">
+                <label>Your Email <strong>(Static)</strong></label>
+                <input type="email" name="email" value="<%= userEmail %>" readonly required>
+            </div>
+            <div class="input-group">
+                <label>Subject <strong>(required)</strong></label>
+                <input type="text" name="subject" placeholder="Brief description of your issue" required>
+            </div>
+            <div class="input-group">
+                <label>Related Order <strong>(optional)</strong></label>
+                <select name="order_id">
+                    <option value="">-- No specific order --</option>
+                    <% orders.forEach(order => { %>
+                        <option value="<%= order.id %>">
+                            Order #<%= order.id %> - <%= order.product_name %> (<%= order.tracking_number %>)
+                        </option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Message <strong>(required)</strong></label>
+                <textarea name="message" placeholder="Please provide as much detail as possible..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+        <a href="/shop" class="back-link">← Back to Shop</a>
+    </div>
+</body>
+</html>
