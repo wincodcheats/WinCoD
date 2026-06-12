@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>WinCoD • Cheats Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* ========== BASE & MOVING LINES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0404;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .moving-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #b30000, #ff1a1a, #990000, transparent);
+            height: 2px;
+            width: 100%;
+            animation: moveLine 8s linear infinite;
+        }
+        @keyframes moveLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .line:nth-child(1) { top: 10%; animation-duration: 12s; width: 80%; left: 10%; }
+        .line:nth-child(2) { top: 25%; animation-duration: 9s; width: 85%; left: 7%; }
+        .line:nth-child(3) { top: 40%; animation-duration: 15s; width: 90%; left: 5%; }
+        .line:nth-child(4) { top: 55%; animation-duration: 7s; width: 75%; left: 12%; }
+        .line:nth-child(5) { top: 70%; animation-duration: 11s; width: 95%; left: 2%; }
+        .line:nth-child(6) { top: 85%; animation-duration: 13s; width: 85%; left: 8%; }
+
+        /* ========== SHOP CONTAINER ========== */
+        .shop-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 5, 5, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 50, 50, 0.4);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .user-email {
+            color: #ff9999;
+            font-weight: bold;
+            background: rgba(255,255,255,0.05);
+            padding: 6px 12px;
+            border-radius: 30px;
+        }
+        .auth-link, .logout-btn, .support-btn {
+            background: rgba(204, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+            color: #ffcccc;
+            padding: 6px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 80, 80, 0.5);
+            cursor: pointer;
+        }
+        .auth-link:hover, .logout-btn:hover, .support-btn:hover {
+            background: rgba(204, 0, 0, 0.45);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease;
+        }
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255,0,0,0.5);
+            letter-spacing: 4px;
+        }
+        .hero p {
+            color: rgba(255,200,200,0.8);
+            font-size: 18px;
+            margin-top: 16px;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .product-card {
+            background: rgba(20, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 50, 50, 0.4);
+            border-radius: 24px;
+            padding: 28px 20px;
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease backwards;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff3333;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .product-icon { font-size: 48px; margin-bottom: 20px; }
+        .product-title { font-size: 24px; font-weight: bold; color: #ff6666; margin-bottom: 15px; }
+        .product-duration { font-size: 14px; color: rgba(255,200,200,0.7); margin-bottom: 20px; }
+        .product-price {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin: 20px 0;
+            text-shadow: 0 0 8px #ff3333, 0 0 4px #ff0000;
+        }
+        .product-price span {
+            font-size: 18px;
+            font-weight: normal;
+            color: #ff9999;
+        }
+        .btn-buy {
+            background: linear-gradient(135deg, #cc0000, #660000);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .btn-buy:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px #ff0000;
+            background: linear-gradient(135deg, #ff1a1a, #990000);
+        }
+
+        .beta-badge {
+            background: rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(8px);
+            color: #f59e0b;
+            text-align: center;
+            padding: 8px;
+            border-radius: 40px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #f59e0b;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: rgba(255,180,180,0.7);
+            font-size: 12px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show {
+            display: flex !important;
+        }
+        .glass-modal {
+            background: rgba(20, 5, 5, 0.95);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 50, 50, 0.8);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.3s ease;
+        }
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .glass-modal h3 {
+            color: #ff6666;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .glass-modal p {
+            color: rgba(255, 200, 200, 0.9);
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+        .modal-btn {
+            background: linear-gradient(135deg, #cc0000, #660000);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            width: auto;
+            font-size: 16px;
+        }
+        .modal-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 40px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .user-bar { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="moving-lines">
+        <div class="line"></div><div class="line"></div><div class="line"></div>
+        <div class="line"></div><div class="line"></div><div class="line"></div>
+    </div>
+
+    <div class="shop-container">
+        <!-- User bar with support button (opens modal) -->
+        <div class="user-bar">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="/images/logo.png" alt="WinCoD" style="height:40px;" onerror="this.style.display='none'">
+                <% if (user) { %>
+                    <span class="user-email">𝕎 : <%= user.username %></span>
+                <% } else { %>
+                    <span class="user-email">𝕎 : Guest</span>
+                <% } %>
+            </div>
+            <div>
+                <% if (user) { %>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                    <a href="/my-orders" class="auth-link"> My Orders</a>
+                <% } else { %>
+                    <a href="/login" class="auth-link">Login</a>
+                    <a href="/register" class="auth-link">Register</a>
+                <% } %>
+                <button id="supportBtn" class="support-btn">𝕎 Support</button>
+            </div>
+        </div>
+
+        <!-- Beta badge -->
+        <% if (beta) { %>
+            <div class="beta-badge"> 𝕎 <strong> BETA VERSION </strong> 𝕎</div>
+        <% } %>
+
+        <!-- Hero -->
+        <div class="hero">
+            <img src="/images/logo.png" alt="WinCoD" style="max-width:200px; margin-bottom:20px;" onerror="this.style.display='none'">
+            <h1>▶| BLACK OPS 6 & 7/MWIII/WZ |◀</h1>
+            <p>Undetected · Aimbot · Wallhack · And Much More </p>
+            <p> <strong> · | </strong> <strong>Instant Delivery</strong> <strong>| · </strong> </p>
+        </div>
+
+        <!-- Products -->
+        <div class="products-grid">
+            <div class="product-card" data-product="3 Days" data-amount="5" data-days="3">
+                <div class="product-icon">🔥</div>
+                <div class="product-title">3 DAYS ACCESS</div>
+                <div class="product-duration">• Perfect for tournament weekend •</div>
+                <div class="product-price">$5 <span>USD</span></div>
+                <button class="btn-buy">BUY NOW</button>
+            </div>
+            <div class="product-card" data-product="7 Days" data-amount="10" data-days="7">
+                <div class="product-icon">⚡</div>
+                <div class="product-title">7 DAYS ACCESS</div>
+                <div class="product-duration">• Weekly domination •</div>
+                <div class="product-price">$10 <span>USD</span></div>
+                <button class="btn-buy">BUY NOW</button>
+            </div>
+            <div class="product-card" data-product="30 Days" data-amount="20" data-days="30">
+                <div class="product-icon gold-skull" style="color:#ffd700; text-shadow:0 0 5px #ffaa00;">💀</div>
+                <div class="product-title">30 DAYS ACCESS</div>
+                <div class="product-duration">• Best value for grinders •</div>
+                <div class="product-price">$20 <span>USD</span></div>
+                <button class="btn-buy">BUY NOW</button>
+            </div>
+           <div class="product-card" data-product="Lifetime" data-amount="200" data-days="0">
+                <div class="product-icon">🏆</div>
+                <div class="product-title">LIFETIME ACCESS</div>
+                <div class="product-duration">• Permanent updates •</div>
+                <div class="product-price">$200 <span>USD</span></div>
+                <button class="btn-buy">BUY NOW</button>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>• |</strong> © 2026 WinCoD • All sales are final • No refunds  <strong>except if an error occurred from us | •</strong></p>
+        </footer>
+    </div>
+
+    <!-- Support Info Modal (instead of direct redirect) -->
+    <div id="supportInfoModal" class="modal">
+        <div class="glass-modal">
+            <div class="modal-icon">📢</div>
+            <h3>Support Information</h3>
+            <p>Please Contact Us on <a href="https://t.me/OU71C" target="_blank" style="color: #ff9999; text-decoration: underline;">Telegram</a> if none of our support team responded via email within 24 hours.</p>
+            <p>Thank you for your patience!</p>
+            <div style="margin-top: 20px;">
+                <button id="goToContactBtn" class="modal-btn" style="background: #410202;">Send Us a Message</button>
+                <button id="closeSupportInfoBtn" class="modal-btn" style="background: #1a0404;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal">
+        <div class="glass-modal">
+            <div class="modal-icon">⚠️</div>
+            <h3>Disclaimer</h3>
+            <p>Cheating in games can get you <strong>Permanent ban</strong>.<br>
+            We are <strong>Not responsible</strong> if you got banned using our cheats.</p>
+            <button id="closeDisclaimerBtn" class="modal-btn">I Understand And Using At My Own Risk</button>
+        </div>
+    </div>
+
+    <script>
+        const isLoggedIn = <%= user ? 'true' : 'false' %>;
+        document.querySelectorAll('.btn-buy').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (!isLoggedIn) {
+                    const currentUrl = encodeURIComponent(window.location.pathname);
+                    window.location.href = `/login?redirect=${currentUrl}`;
+                    return;
+                }
+                const card = btn.closest('.product-card');
+                const product = card.dataset.product;
+                const amount = card.dataset.amount;
+                const days = card.dataset.days;
+                window.location.href = `/payment?product=${encodeURIComponent(product)}&amount=${amount}&days=${days}`;
+            });
+        });
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                await fetch('/logout', { method: 'POST' });
+                window.location.href = '/';
+            });
+        }
+
+        // Support Info Modal logic
+        const supportBtn = document.getElementById('supportBtn');
+        const supportInfoModal = document.getElementById('supportInfoModal');
+        const closeSupportInfo = document.getElementById('closeSupportInfoBtn');
+        const goToContact = document.getElementById('goToContactBtn');
+        if (supportBtn && supportInfoModal) {
+            supportBtn.addEventListener('click', () => supportInfoModal.classList.add('show'));
+            if (closeSupportInfo) closeSupportInfo.addEventListener('click', () => supportInfoModal.classList.remove('show'));
+            if (goToContact) goToContact.addEventListener('click', () => {
+                window.location.href = '/contact';
+            });
+            supportInfoModal.addEventListener('click', (e) => { if (e.target === supportInfoModal) supportInfoModal.classList.remove('show'); });
+        }
+
+        // Disclaimer modal (once per session)
+        const disclaimerModal = document.getElementById('disclaimerModal');
+        const disclaimerSeen = sessionStorage.getItem('winCoD_disclaimer_seen');
+        if (disclaimerModal && !disclaimerSeen) {
+            disclaimerModal.classList.add('show');
+        }
+        const closeDisclaimer = document.getElementById('closeDisclaimerBtn');
+        if (closeDisclaimer) {
+            closeDisclaimer.addEventListener('click', () => {
+                disclaimerModal.classList.remove('show');
+                sessionStorage.setItem('winCoD_disclaimer_seen', 'true');
+            });
+        }
+        if (disclaimerModal) {
+            disclaimerModal.addEventListener('click', (e) => {
+                if (e.target === disclaimerModal) disclaimerModal.classList.remove('show');
+            });
+        }
+    </script>
+</body>
+</html>
